@@ -1,0 +1,20 @@
+name: Telegram Alert on Push
+
+on:
+  push:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram message
+        uses: appleboy/telegram-action@master
+        with:
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          message: |
+            ✅ GitHub Push Alert
+            Repo: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Author: ${{ github.actor }}
+            Commit: ${{ github.event.head_commit.message }}
