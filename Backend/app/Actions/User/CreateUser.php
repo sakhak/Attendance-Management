@@ -1,5 +1,13 @@
 <?php
+
 namespace App\Actions\User;
-class CreateUser{
-    
+
+class CreateUser
+{
+    public function execute()
+    {
+        return response()->json([
+            'message' => "Hello everyone"
+        ]);
+    }
 }
