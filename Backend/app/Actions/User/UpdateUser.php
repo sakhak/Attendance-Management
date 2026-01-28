@@ -2,4 +2,12 @@
 
 namespace App\Actions\User;
 
-class UpdateUser {}
+class UpdateUser
+{
+    public function execute()
+    {
+        return response()->json([
+            'message' => "Hello everyone"
+        ]);
+    }
+}
