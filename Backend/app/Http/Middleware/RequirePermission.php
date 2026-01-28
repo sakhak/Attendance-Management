@@ -13,8 +13,12 @@ class RequirePermission
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $permissionKey): Response
     {
+        $user = $request->user();
+        if (!$user || !$user->hasPermission($permissionKey)) {
+            abort(403, 'Forbidden');
+        }
         return $next($request);
     }
 }
