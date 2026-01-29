@@ -52,23 +52,23 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_role')
             ->withTimestamps();
     }
-    public function permissions()
-    {
-        // permissions through roles (no direct pivot in diagram)
-        return Permission::query()
-            ->select('permissions.*')
-            ->join('role_permission', 'permissions.id', '=', 'role_permission.permission_id')
-            ->join('user_role', 'role_permission.role_id', '=', 'user_role.role_id')
-            ->where('user_role.user_id', $this->id)
-            ->distinct();
-    }
-    public function hasRole(string $roleKey): bool
-    {
-        return $this->roles()->where('key', $roleKey)->exists();
-    }
+    // public function permissions()
+    // {
+    //     // permissions through roles (no direct pivot in diagram)
+    //     return Permission::query()
+    //         ->select('permissions.*')
+    //         ->join('role_permission', 'permissions.id', '=', 'role_permission.permission_id')
+    //         ->join('user_role', 'role_permission.role_id', '=', 'user_role.role_id')
+    //         ->where('user_role.user_id', $this->id)
+    //         ->distinct();
+    // }
+    // public function hasRole(string $roleKey): bool
+    // {
+    //     return $this->roles()->where('key', $roleKey)->exists();
+    // }
 
-    public function hasPermission(string $permissionKey): bool
-    {
-        return $this->permissions()->where('permissions.key', $permissionKey)->exists();
-    }
+    // public function hasPermission(string $permissionKey): bool
+    // {
+    //     return $this->permissions()->where('permissions.key', $permissionKey)->exists();
+    // }
 }

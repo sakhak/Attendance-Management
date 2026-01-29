@@ -24,10 +24,10 @@ Route::get('/roles/{role}', [RoleController::class, 'show']);
 Route::put('/roles/{role}', [RoleController::class, 'update']);
 Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
 
+Route::get('/rolepermission', [RolePermissionController::class, 'index']);
 
-
-Route::post('/roles/{role}/permissions', [RolePermissionController::class, 'store']);
-Route::put('/roles/{role}/permissions', [RolePermissionController::class, 'update']);
-Route::delete('/roles/{role}/permissions/{permissionId}', [RolePermissionController::class, 'destroy']);
-
-
+Route::prefix('roles/{role}/permissions')->group(function () {
+    Route::post('/', [RolePermissionController::class, 'store']);     // attach
+    Route::put('/', [RolePermissionController::class, 'update']);     // update
+    Route::delete('/', [RolePermissionController::class, 'destroy']); // detach
+});

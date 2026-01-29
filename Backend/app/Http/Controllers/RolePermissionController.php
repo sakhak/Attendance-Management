@@ -6,83 +6,85 @@ use App\Actions\RolePermission\CreateRolePermission;
 use App\Actions\RolePermission\UpdateRolePermissions;
 use App\Actions\RolePermission\DeleteRolePermission;
 use App\Models\Role;
+use App\Models\RolePermission;
+// use Illuminate\Http\Request;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class RolePermissionController extends Controller
 {
-    // CREATE (attach one permission)
-    public function store(Request $request, Role $role)
+    public function index()
+    {
+        $rolePermission = RolePermission::all();
+        return response()->json([
+            'list' => [
+                'data' => $rolePermission
+            ]
+        ]);
+    }
+    // CREATE (attach permission(s))
+    public function store(Request $request, Role $role, CreateRolePermission $action)
     {
         try {
-            $validated = $request->validate([
-                'permission_id' => ['required', 'array'],
-                'permission_id.*' => ['integer', 'exists:permissions,id'],
-            ]);
+            // Make sure role_id is included for the action validation
+            $request->merge(['role_id' => $role->id]);
 
-            $action = new CreateRolePermission();
-            $role = $action->execute($role, $validated['permission_id']);
-
-            return response()->json([
-                'data' => $role,
-                'message' => 'Permission attached to role successfully',
-            ], 201);
+            return $action->execute($request);
         } catch (ValidationException $e) {
             return response()->json([
-                'message' => 'Validation failed',
+                'data' => null,
+                'message' => 'Validation failed.',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return response()->json([
-                'message' => 'Error attaching permission',
+                'data' => null,
+                'message' => 'Server error.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    // UPDATE (sync/replace all permissions)
-    public function update(Request $request, Role $role)
+    // UPDATE (sync/replace or your current "add only" logic)
+    public function update(Request $request, Role $role, UpdateRolePermissions $action)
     {
         try {
-            $validated = $request->validate([
-                'permission_ids' => ['required', 'array'],
-                'permission_ids.*' => ['integer', 'exists:permissions,id'],
-            ]);
+            $request->merge(['role_id' => $role->id]);
 
-            $action = new UpdateRolePermissions();
-            $role = $action->execute($role, $validated['permission_ids']);
-
-            return response()->json([
-                'data' => $role,
-                'message' => 'Role permissions updated successfully',
-            ], 200);
+            return $action->execute($request);
         } catch (ValidationException $e) {
             return response()->json([
-                'message' => 'Validation failed',
+                'data' => null,
+                'message' => 'Validation failed.',
                 'errors' => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             return response()->json([
-                'message' => 'Error updating role permissions',
+                'data' => null,
+                'message' => 'Server error.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    // DELETE (detach one permission)
-    public function destroy(Role $role, array $permissionId)
+    // DELETE (detach permission(s))
+    public function destroy(Request $request, Role $role, DeleteRolePermission $action)
     {
         try {
-            $action = new DeleteRolePermission();
-            $role = $action->execute($role, $permissionId);
+            $request->merge(['role_id' => $role->id]);
 
+            return $action->execute($request);
+        } catch (ValidationException $e) {
             return response()->json([
-                'data' => $role,
-                'message' => 'Permission detached from role successfully',
-            ], 200);
-        } catch (\Exception $e) {
+                'data' => null,
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (Throwable $e) {
             return response()->json([
-                'message' => 'Error detaching permission',
+                'data' => null,
+                'message' => 'Server error.',
                 'error' => $e->getMessage(),
             ], 500);
         }
