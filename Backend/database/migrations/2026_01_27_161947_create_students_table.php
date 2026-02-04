@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('student_code', 50)->unique();
+            $table->string('student_code')->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-
-            $table->unique(['user_id']); // one student profile per user
         });
     }
 

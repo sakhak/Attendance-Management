@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('teacher_code', 50)->unique();
+            $table->string('teacher_code')->unique();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
-
-            $table->unique(['user_id']); // one teacher profile per user
         });
     }
 
