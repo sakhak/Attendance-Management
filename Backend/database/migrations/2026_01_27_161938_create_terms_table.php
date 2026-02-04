@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('terms', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('name');
             $table->foreignId('academic_year_id')->constrained('academic_years')->cascadeOnDelete();
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();
-
-            $table->unique(['academic_year_id', 'name']);
         });
     }
 

@@ -13,33 +13,21 @@ return new class extends Migration
     {
         Schema::create('class_sessions', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('class_id')
-                ->constrained('classes')
-                ->cascadeOnDelete();
-
-            $table->foreignId('term_id')
-                ->constrained('terms')
-                ->cascadeOnDelete();
-
-            $table->foreignId('teacher_id')
-                ->constrained('teachers')
-                ->cascadeOnDelete();
-
-            $table->date('session_date');
-
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->foreignId('term_id')->constrained('terms')->restrictOnDelete();
+            $table->foreignId('teacher_id')->constrained('teachers')->restrictOnDelete();
+            $table->dateTime('start_datetime')->index();
+            $table->dateTime('end_datetime')->index();
             $table->enum('status', [
                 'scheduled',
+                'not_started',
                 'ongoing',
                 'completed',
                 'canceled',
-                'postponed'
+                'postponed',
             ])->default('scheduled');
-
-            $table->timestamp('created_on')->useCurrent();
+            $table->timestamp('created_on')->nullable();
             $table->timestamps();
-
-            $table->index(['class_id', 'term_id', 'session_date']);
         });
     }
 

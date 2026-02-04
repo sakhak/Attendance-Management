@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->timestamp('enrolled_on')->useCurrent();
+            $table->foreignId('grade_level_id')->constrained('grade_levels')->restrictOnDelete();
+            $table->date('enrolled_on')->nullable();
             $table->timestamps();
 
             $table->unique(['class_id', 'student_id']);

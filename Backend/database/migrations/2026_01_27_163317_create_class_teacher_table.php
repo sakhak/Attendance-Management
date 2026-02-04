@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
             $table->foreignId('teacher_id')->constrained('teachers')->cascadeOnDelete();
-            $table->timestamp('assigned_at')->useCurrent();
+            $table->timestamp('assigned_at')->nullable();
             $table->timestamps();
 
             $table->unique(['class_id', 'teacher_id']);
