@@ -25,7 +25,6 @@ php artisan migrate
 npm install
 npm run build
 ```
-
 ### Run the backend locally
 
 ```bash
