@@ -15,12 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
             $table->foreignId('term_id')->constrained('terms')->cascadeOnDelete();
-
-            $table->unsignedInteger(' ')->default(0);
+            $table->unsignedInteger('absence_count')->default(0);
             $table->timestamp('flagged_at')->useCurrent();
-
             $table->timestamps();
-
             $table->unique(['student_id', 'term_id']);
         });
     }
