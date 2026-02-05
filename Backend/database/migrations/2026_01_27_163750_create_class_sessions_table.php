@@ -16,6 +16,16 @@ return new class extends Migration
             $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
             $table->foreignId('term_id')->constrained('terms')->restrictOnDelete();
             $table->foreignId('teacher_id')->constrained('teachers')->restrictOnDelete();
+            $table->foreignId('subject_id')->constrained('subjects')->restrictOnDelete();
+            $table->enum('day_of_week', [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+            ]);
             $table->time('start_time');
             $table->time('end_time');
             $table->enum('status', [
