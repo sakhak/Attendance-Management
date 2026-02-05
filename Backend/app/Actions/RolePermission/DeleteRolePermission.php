@@ -24,7 +24,7 @@ class DeleteRolePermission
                 ->where('permission_id', $pid)
                 ->first();
 
-            if (! $rolePermission) {
+            if (!$rolePermission) {
                 $notFound[] = $pid;
                 continue;
             }

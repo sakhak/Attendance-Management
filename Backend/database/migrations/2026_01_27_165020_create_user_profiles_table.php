@@ -12,20 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-
-            $table->string('first_name', 100)->nullable();
-            $table->string('last_name', 100)->nullable();
-            $table->string('phone', 30)->nullable();
-            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->foreignId('user_id')->primary()->constrained('users')->cascadeOnDelete();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('gender')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->text('address')->nullable();
-            $table->string('image', 255)->nullable(); // path/url
-
-            $table->timestamps();
-
-            $table->unique('user_id'); // 1 user = 1 profile
+            $table->string('image')->nullable();
         });
     }
 

@@ -24,7 +24,6 @@ class UpdateRolePermissions
             $exists = RolePermission::where('role_id', $roleId)
                 ->where('permission_id', $pid)
                 ->exists();
-
             if ($exists) {
                 $skipped[] = $pid;
                 continue;

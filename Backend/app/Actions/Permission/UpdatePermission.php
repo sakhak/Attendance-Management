@@ -20,4 +20,5 @@ class UpdatePermission
 
         return $permission->fresh();
     }
+    
 }

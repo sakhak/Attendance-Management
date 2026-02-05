@@ -13,20 +13,15 @@ return new class extends Migration
     {
         Schema::create('attendance_records', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('class_session_id')->constrained('class_sessions')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-
-            $table->foreignId('recorded_by')->constrained('teachers')->cascadeOnDelete();
+            $table->foreignId('recorded_by')->constrained('users')->restrictOnDelete();
 
             $table->enum('status', ['present', 'absent', 'permission'])->default('present');
             $table->text('comment')->nullable();
-            $table->timestamp('recorded_on')->useCurrent();
-
             $table->timestamps();
 
             $table->unique(['class_session_id', 'student_id']);
-            $table->index(['student_id', 'status']);
         });
     }
 
