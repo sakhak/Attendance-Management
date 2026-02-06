@@ -12,16 +12,14 @@ const App: React.FC = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LayoutMainPage/>}>
-
-          </Route>
+          <Route path="/" element={<LayoutMainPage />}></Route>
           <Route path="/auth">
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="recovery" element={<ForgotPasswordPage />} />
           </Route>
           <Route>
-            <Route path="*" element={<NotfoundPage/>}></Route>
+            <Route path="*" element={<NotfoundPage />}></Route>
           </Route>
         </Routes>
       </BrowserRouter>
