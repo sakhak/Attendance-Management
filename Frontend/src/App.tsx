@@ -6,13 +6,20 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import LayoutMainPage from "./pages/layout/LayoutMainPage";
 import NotfoundPage from "./pages/notfound/NotfoundPage";
+import Testing from "./pages/Testing/Testing";
 
 const App: React.FC = () => {
   return (
     <>
       <BrowserRouter>
         <Routes>
+<<<<<<< HEAD
           <Route path="/" element={<LayoutMainPage />}></Route>
+=======
+          <Route path="/" element={<LayoutMainPage/>}>
+            <Route path="" element={<Testing/>}/>
+          </Route>
+>>>>>>> c77153671b5af4698c1fe8c9401e4172a4dc77b6
           <Route path="/auth">
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
