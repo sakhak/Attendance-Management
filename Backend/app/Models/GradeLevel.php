@@ -16,25 +16,25 @@ class GradeLevel extends Model
         "order_no",
         "is_active"
     ];
-    public function gradeLevelSubjects():HasMany
-    {
-        return $this->hasMany(GradeLevelSubject::class, 'grade_level_id');
-    }
-    public function enrollment():HasMany
+    // public function gradeLevelSubjects():HasMany
+    // {
+    //     return $this->hasMany(GradeLevelSubject::class, 'grade_level_id');
+    // }
+    public function enrollment(): HasMany
     {
         return $this->hasMany(Enrollment::class, 'grade_level_id');
     }
-    public function classes():HasMany
+    public function classes(): HasMany
     {
         return $this->hasMany(Classes::class, 'grade_level_id');
     }
-    public function subjects():BelongsToMany
+    public function subjects(): BelongsToMany
     {
         return $this->belongsToMany(
             Subject::class,
             'grade_level_subjects',
             'grade_level_id',
             'subject_id'
-        );
+        )->withTimestamps();
     }
 }

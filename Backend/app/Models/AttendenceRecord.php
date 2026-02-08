@@ -18,15 +18,15 @@ class AttendenceRecord extends Model
         'status',
         'comment'
     ];
-    public function classSession():BelongsTo
+    public function classSession(): BelongsTo
     {
         return $this->belongsTo(ClassSession::class, 'class_session_id');
     }
-    public function student():BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
-    public function recorder():BelongsTo
+    public function recorder(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
     }

@@ -17,10 +17,10 @@ class AcademicYear extends Model
     ];
 
 
-    // relationship 
+    // relationship
 
     public function term(): HasMany
     {
-        return $this->hasMany(Term::class, 'academic_year_id');
+        return $this->hasMany(Terms::class, 'academic_year_id');
     }
 }
