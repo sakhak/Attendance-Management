@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Logo } from "../icons";
 
 type TabKey = "attendance" | "reports" | "blacklist";
 
@@ -22,7 +23,7 @@ export default function Navbar({
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded bg-slate-800">
-              <svg
+              {/* <svg
                 width="25"
                 height="25"
                 viewBox="0 0 32 32"
@@ -71,7 +72,8 @@ export default function Navbar({
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
-              </svg>
+              </svg> */}
+              <Logo />
             </div>
 
             <div className="leading-tight ">
