@@ -17,12 +17,11 @@ class Role extends Model
     ];
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_role')
-            ->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_role', 'role_id', 'user_id');
     }
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_permissions')
+        return $this->belongsToMany(Permission::class, 'role_permissions', 'role_id', 'permission_id')
             ->withTimestamps();
     }
 }

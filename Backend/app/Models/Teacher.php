@@ -30,10 +30,9 @@ class Teacher extends Model
             'class_id'
         );
     }
-    public function classSections():BelongsToMany
+    public function classSections():HasMany
     {
-        return $this->belongsToMany(ClassSection::class, 'class_teachers')
-            ->withTimestamps();
+        return $this->hasMany(ClassSession::class, 'teacher_id');
     }
     // public function attendencesRecords():HasMany
     // {
