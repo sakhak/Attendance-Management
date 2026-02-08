@@ -55,16 +55,16 @@ class ClassSession extends Model
     }
 
     public function term(): BelongsTo {
-        return $this->belongsTo(Terms::class , "term_id" , 'id');
+        return $this->belongsTo(Term::class , "term_id" , 'id');
     }
     public function subject(): BelongsTo {
-        return $this->belongsTo(Subjects::class , "subject_id" , 'id');
+        return $this->belongsTo(Subject::class , "subject_id" , 'id');
     }
     public function teacher(): BelongsTo {
-        return $this->belongsTo(Teachers::class , "teacher_id" , 'id');
+        return $this->belongsTo(Teacher::class , "teacher_id" , 'id');
     }
 
     public function attendance():HasMany {
-        return $this->hasMany(AttendanceRecords::class , "class_session_id" , "id");
+        return $this->hasMany(AttendenceRecord::class , "class_session_id" , "id");
     }
 }

@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -49,26 +51,26 @@ class User extends Authenticatable
     }
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, 'user_role')
-            ->withTimestamps();
+        return $this->belongsToMany(Role::class, 'user_role', 'user_id', 'role_id');
     }
-    // public function permissions()
-    // {
-    //     // permissions through roles (no direct pivot in diagram)
-    //     return Permission::query()
-    //         ->select('permissions.*')
-    //         ->join('role_permission', 'permissions.id', '=', 'role_permission.permission_id')
-    //         ->join('user_role', 'role_permission.role_id', '=', 'user_role.role_id')
-    //         ->where('user_role.user_id', $this->id)
-    //         ->distinct();
-    // }
-    // public function hasRole(string $roleKey): bool
-    // {
-    //     return $this->roles()->where('key', $roleKey)->exists();
-    // }
-
-    // public function hasPermission(string $permissionKey): bool
-    // {
-    //     return $this->permissions()->where('permissions.key', $permissionKey)->exists();
-    // }
+    public function userProfile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
+    }
+    public function student(): HasOne
+    {
+        return $this->hasOne(Student::class, 'user_id');
+    }
+    public function teacher(): HasOne
+    {
+        return $this->hasOne(Teacher::class, 'user_id');
+    }
+    public function reportexports():HasMany
+    {
+        return $this->hasMany(ReportExports::class, 'user_id');
+    }
+    public function recordedAttendance():HasMany
+    {
+        return $this->hasMany(AttendenceRecord::class, 'recorded_by');
+    }
 }
