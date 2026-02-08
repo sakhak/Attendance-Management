@@ -69,7 +69,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReportExports::class, 'user_id');
     }
-    public function recordedAttendanceRecords():HasMany
+    public function recordedAttendance():HasMany
     {
         return $this->hasMany(AttendenceRecord::class, 'recorded_by');
     }
