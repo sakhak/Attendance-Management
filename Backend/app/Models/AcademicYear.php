@@ -19,8 +19,8 @@ class AcademicYear extends Model
 
     // relationship 
 
-    public function term(): HasMany {
-        return $this->hasMany(Terms::class , 'academic_year_id');
+    public function term(): HasMany
+    {
+        return $this->hasMany(Term::class, 'academic_year_id');
     }
-
 }
