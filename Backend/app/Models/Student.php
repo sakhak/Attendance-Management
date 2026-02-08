@@ -21,11 +21,11 @@ class Student extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'grade_level_subjects', 'grade_level_id', 'subject_id');
     }
 
     public function enrollments(): HasMany
     {
-        return $this->hasMany(Enrollment::class);
+        return $this->hasMany(Enrollment::class, 'student_id');
     }
 }
