@@ -27,11 +27,7 @@ class Terms extends Model
 
     public function academicYear(): BelongsTo
     {
-        return $this->belongsTo(AcademicYear::class);
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 
-    public function classSessions(): HasMany
-    {
-        return $this->hasMany(ClassSession::class);
-    }
 }

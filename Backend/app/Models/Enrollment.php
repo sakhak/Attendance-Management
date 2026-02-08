@@ -33,4 +33,8 @@ class Enrollment extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
+    public function gradeLevel(): BelongsTo
+    {
+        return $this->belongsTo(GradeLevel::class, 'grade_level_id');
+    }
 }
