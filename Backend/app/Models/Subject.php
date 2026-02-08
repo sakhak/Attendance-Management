@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\hasOne;
 
 class Subject extends Model
 {
@@ -17,8 +17,8 @@ class Subject extends Model
 
     // Relationships
 
-    public function classSessions(): HasMany
+    public function classSessions(): hasOne
     {
-        return $this->hasMany(ClassSession::class, 'subject_id');
+        return $this->hasOne(ClassSession::class, 'subject_id');
     }
 }
