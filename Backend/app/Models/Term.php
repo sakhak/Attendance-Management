@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Validation\ValidationException;
 
-class Terms extends Model
+class Term extends Model
 {
     use HasFactory;
 
@@ -59,11 +59,11 @@ class Terms extends Model
         return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 
-    public function class_session(): hasMany {
+    public function class_session(): HasMany {
         return $this->hasMany(ClassSession::class, 'term_id');
     }
     
-    public function black_list(): hasMany {
+    public function black_list(): HasMany {
         return $this->hasMany(BlackList::class, 'term_id');
     }
 
