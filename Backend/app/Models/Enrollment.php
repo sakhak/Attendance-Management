@@ -25,7 +25,7 @@ class Enrollment extends Model
 
     // Relationships
 
-    public function class(): BelongsTo
+    public function classes(): BelongsTo
     {
         return $this->belongsTo(Classes::class, 'class_id');
     }
@@ -35,7 +35,7 @@ class Enrollment extends Model
         return $this->hasOne(Student::class, 'student_id');
     }
 
-    public function gradeLevel(): BelongsTo
+    public function grade_level(): BelongsTo
     {
         return $this->belongsTo(GradeLevel::class, 'grade_level_id');
     }
