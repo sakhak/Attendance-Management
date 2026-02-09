@@ -21,6 +21,6 @@ class AcademicYear extends Model
 
     public function term(): HasMany
     {
-        return $this->hasMany(Terms::class, 'academic_year_id');
+        return $this->hasMany(Term::class, 'academic_year_id');
     }
 }
