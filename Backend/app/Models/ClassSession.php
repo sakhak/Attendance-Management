@@ -34,7 +34,8 @@ class ClassSession extends Model
 
     // formart time
 
-    public function getFormattedStartTimeAttribute(): string {
+    public function getFormattedStartTimeAttribute(): string
+    {
         return $this->start_time->format('g:i A');
     }
 
@@ -43,28 +44,34 @@ class ClassSession extends Model
         return $this->end_time->format('g:i A');
     }
 
-    public function getTimeRangeAttribute() {
-        return $this->getFormattedStartTimeAttribute(). " - ".$this->getFormattedEndTimeAttribute();
+    public function getTimeRangeAttribute()
+    {
+        return $this->getFormattedStartTimeAttribute() . " - " . $this->getFormattedEndTimeAttribute();
     }
 
 
     // relationship code 
 
-    public function class(): BelongsTo {
-        return $this->belongsTo(Classes::class , "class_id" , 'id');
+    public function class(): BelongsTo
+    {
+        return $this->belongsTo(Classes::class, "class_id", 'id');
     }
 
-    public function term(): BelongsTo {
-        return $this->belongsTo(Terms::class , "term_id" , 'id');
+    public function term(): BelongsTo
+    {
+        return $this->belongsTo(Terms::class, "term_id", 'id');
     }
-    public function subject(): BelongsTo {
-        return $this->belongsTo(Subjects::class , "subject_id" , 'id');
+    public function subject(): BelongsTo
+    {
+        return $this->belongsTo(Subject::class, "subject_id", 'id');
     }
-    public function teacher(): BelongsTo {
-        return $this->belongsTo(Teachers::class , "teacher_id" , 'id');
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(Teacher::class, "teacher_id", 'id');
     }
 
-    public function attendance():HasMany {
-        return $this->hasMany(AttendanceRecords::class , "class_session_id" , "id");
+    public function attendance(): HasMany
+    {
+        return $this->hasMany(AttendenceRecord::class, "class_session_id", "id");
     }
 }
