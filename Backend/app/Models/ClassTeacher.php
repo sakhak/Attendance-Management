@@ -22,13 +22,5 @@ class ClassTeacher extends Model
         'assigned_at' => 'datetime',
     ];
 
-    public function class(): BelongsTo
-    {
-        return $this->belongsTo(Classes::class, 'class_id', 'id');
-    }
 
-    public function teacher(): BelongsTo
-    {
-        return $this->belongsTo(Teachers::class, 'teacher_id', 'id');
-    }
 }

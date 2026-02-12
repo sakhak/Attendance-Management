@@ -50,7 +50,7 @@ class ClassSession extends Model
     }
 
 
-    // relationship code 
+    // relationship code
 
     public function class(): BelongsTo
     {
@@ -59,7 +59,7 @@ class ClassSession extends Model
 
     public function term(): BelongsTo
     {
-        return $this->belongsTo(Terms::class, "term_id", 'id');
+        return $this->belongsTo(Term::class, "term_id", 'id');
     }
     public function subject(): BelongsTo
     {
@@ -72,6 +72,6 @@ class ClassSession extends Model
 
     public function attendance(): HasMany
     {
-        return $this->hasMany(AttendenceRecord::class, "class_session_id", "id");
+        return $this->hasMany(AttendanceRecord::class, "class_session_id", "id");
     }
 }

@@ -35,4 +35,7 @@ class ReportExports extends Model
         return $this->belongsTo(User::class , 'user_id' , 'id');
                             //Class           FK of RE    PK of USER 
     }
+    public function classes():BelongsTo {
+        return $this->belongsTo(Classes::class , 'class_id' , 'id');
+    }
 }
