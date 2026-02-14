@@ -29,6 +29,7 @@ class Blacklist extends Model
 
     public function term(): BelongsTo
     {
+
         return $this->belongsTo(Term::class, 'term_id', 'id');
     }
 }

@@ -21,6 +21,4 @@ class ClassTeacher extends Model
     protected $casts = [
         'assigned_at' => 'datetime',
     ];
-
-
 }
