@@ -42,7 +42,7 @@ class Classes extends Model
 
     public function teachers(): BelongsToMany
     {
-        return $this->belongsToMany(Teachers::class, 'class_teacher', 'class_id', 'teacher_id')
+        return $this->belongsToMany(Teacher::class, 'class_teacher', 'class_id', 'teacher_id')
             ->withTimestamps();
     }
 

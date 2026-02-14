@@ -71,6 +71,6 @@ class User extends Authenticatable
     }
     public function recordedAttendance():HasMany
     {
-        return $this->hasMany(AttendenceRecord::class, 'recorded_by');
+        return $this->hasMany(AttendanceRecord::class, 'recorded_by');
     }
 }

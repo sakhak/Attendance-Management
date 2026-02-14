@@ -24,11 +24,12 @@ class Blacklist extends Model
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(Students::class, 'student_id', 'id');
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 
     public function term(): BelongsTo
     {
-        return $this->belongsTo(Terms::class, 'term_id', 'id');
+
+        return $this->belongsTo(Term::class, 'term_id', 'id');
     }
 }

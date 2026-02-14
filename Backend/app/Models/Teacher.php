@@ -17,11 +17,11 @@ class Teacher extends Model
         "teacher_code",
         "status"
     ];
-    public function user():BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function classes():BelongsToMany
+    public function classes(): BelongsToMany
     {
         return $this->belongsToMany(
             Classes::class,
@@ -30,7 +30,7 @@ class Teacher extends Model
             'class_id'
         );
     }
-    public function classSections():HasMany
+    public function classSections(): HasMany
     {
         return $this->hasMany(ClassSession::class, 'teacher_id');
     }

@@ -27,7 +27,7 @@ class Term extends Model
     // Validation for start and end date
     protected static function booted(): void
     {
-        static::saving(function (Terms $term) {
+        static::saving(function (Term $term) {
             if ($term->start_date && $term->end_date && $term->start_date->gt($term->end_date)) {
                 throw ValidationException::withMessages([
                     'end_date' => ['The end date must be on or after the start date.'],
@@ -62,7 +62,7 @@ class Term extends Model
     public function class_session(): HasMany {
         return $this->hasMany(ClassSession::class, 'term_id');
     }
-    
+
     public function black_list(): HasMany {
         return $this->hasMany(BlackList::class, 'term_id');
     }
