@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
 use App\Http\Controllers\ClassesController;
@@ -11,16 +12,27 @@ use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 
+Route::prefix('auth')->group(function () {
+    Route::post('register', [AuthController::class, 'store']);
+    Route::post('login', [AuthController::class, 'login']);
 
-Route::post('/permissions', [PermissionController::class, 'store']);
-Route::put('/permissions/{permission}', [PermissionController::class, 'update']);
-Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy']);
-Route::get('/permissions/{permission}', [PermissionController::class, 'show']);
-Route::get('/permissions', [PermissionController::class, 'index']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('index', [AuthController::class, 'index']);
+        Route::put('update', [AuthController::class, 'update']);
+        Route::get('show/{id}', [AuthController::class, 'show']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
+});
+
+Route::prefix('permissions')->group(function () {
+    Route::post('/', [PermissionController::class, 'store']);
+    Route::put('/{permission}', [PermissionController::class, 'update']);
+    Route::delete('/{permission}', [PermissionController::class, 'destroy']);
+    Route::get('/{permission}', [PermissionController::class, 'show']);
+    Route::get('/', [PermissionController::class, 'index']);
+});
+
 
 
 Route::post('/roles', [RoleController::class, 'store']);
@@ -67,5 +79,3 @@ Route::delete('/students/{student}', [StudentController::class, 'destroy']);
 Route::post('/enrollments', [EnrollmentController::class, 'enroll']);
 Route::delete('/enrollments', [EnrollmentController::class, 'unenroll']);
 Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
-
-
