@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('grade_level_id')->constrained('grade_levels')->restrictOnDelete();
-            $table->foreignId('report_export_id')->constrained('report_exports')->restrictOnDelete();
+            // $table->foreignId('report_export_id')->constrained('report_exports')->restrictOnDelete();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('room_number')->nullable();
