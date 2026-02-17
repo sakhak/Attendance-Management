@@ -10,27 +10,21 @@ import Testing from "./pages/Testing/Testing";
 
 const App: React.FC = () => {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-<<<<<<< HEAD
-          <Route path="/" element={<LayoutMainPage />}></Route>
-=======
-          <Route path="/" element={<LayoutMainPage/>}>
-            <Route path="" element={<Testing/>}/>
-          </Route>
->>>>>>> c77153671b5af4698c1fe8c9401e4172a4dc77b6
-          <Route path="/auth">
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-            <Route path="recovery" element={<ForgotPasswordPage />} />
-          </Route>
-          <Route>
-            <Route path="*" element={<NotfoundPage />}></Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LayoutMainPage />}>
+          <Route index element={<Testing />} />
+        </Route>
+
+        <Route path="/auth">
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="recovery" element={<ForgotPasswordPage />} />
+        </Route>
+
+        <Route path="*" element={<NotfoundPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
