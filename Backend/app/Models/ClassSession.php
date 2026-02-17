@@ -59,7 +59,7 @@ class ClassSession extends Model
 
     public function term(): BelongsTo
     {
-        return $this->belongsTo(Terms::class, "term_id", 'id');
+        return $this->belongsTo(Term::class, "term_id", 'id');
     }
     public function subject(): BelongsTo
     {
