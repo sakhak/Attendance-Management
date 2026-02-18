@@ -1,24 +1,38 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RolePermissionController;
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
 
 
-Route::post('/permissions', [PermissionController::class, 'store']);
-Route::put('/permissions/{permission}', [PermissionController::class, 'update']);
-Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy']);
-Route::get('/permissions/{permission}', [PermissionController::class, 'show']);
-Route::get('/permissions', [PermissionController::class, 'index']);
+Route::prefix('auth')->group(function () {
+    Route::post('register', [AuthController::class, 'store']);
+    Route::post('login', [AuthController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('index', [AuthController::class, 'index']);
+        Route::put('update', [AuthController::class, 'update']);
+        Route::get('show/{id}', [AuthController::class, 'show']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
+});
+
+Route::prefix('permissions')->group(function () {
+    Route::post('/', [PermissionController::class, 'store']);
+    Route::put('/{permission}', [PermissionController::class, 'update']);
+    Route::delete('/{permission}', [PermissionController::class, 'destroy']);
+    Route::get('/{permission}', [PermissionController::class, 'show']);
+    Route::get('/', [PermissionController::class, 'index']);
+});
+
 
 
 Route::post('/roles', [RoleController::class, 'store']);
@@ -34,6 +48,7 @@ Route::prefix('roles/{role}/permissions')->group(function () {
     Route::put('/', [RolePermissionController::class, 'update']);     // update
     Route::delete('/', [RolePermissionController::class, 'destroy']); // detach
 });
+
 
 Route::get('/classes', [ClassesController::class, 'index']);
 Route::post('/classes', [ClassesController::class, 'store']);
@@ -52,3 +67,15 @@ Route::post('/class-teachers', [ClassTeacherController::class, 'store']);
 Route::get('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'show']);
 Route::put('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'update']);
 Route::delete('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'destroy']);
+
+// Students (CRUD + link to users)
+Route::get('/students', [StudentController::class, 'index']);
+Route::post('/students', [StudentController::class, 'store']);
+Route::get('/students/{student}', [StudentController::class, 'show']);
+Route::put('/students/{student}', [StudentController::class, 'update']);
+Route::delete('/students/{student}', [StudentController::class, 'destroy']);
+
+// Enrollment (enroll, unenroll, list class students)
+Route::post('/enrollments', [EnrollmentController::class, 'enroll']);
+Route::delete('/enrollments', [EnrollmentController::class, 'unenroll']);
+Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
