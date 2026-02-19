@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
@@ -79,3 +80,34 @@ Route::delete('/students/{student}', [StudentController::class, 'destroy']);
 Route::post('/enrollments', [EnrollmentController::class, 'enroll']);
 Route::delete('/enrollments', [EnrollmentController::class, 'unenroll']);
 Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
+
+
+// Academic year Crud
+Route::get('/academic-year', [AcademicYearController::class , 'index']);
+Route::post('/academic-year', [AcademicYearController::class , 'store']);
+Route::get('/academic-year/{id}', [AcademicYearController::class , 'show']);
+Route::put('/academic-year/{academicYear}', [AcademicYearController::class , 'update']);
+Route::delete('/academic-year/{academicYear}', [AcademicYearController::class , 'destroy']);
+Route::delete('/academic-year', [AcademicYearController::class , 'destroyMulti']);
+Route::delete('/academic-year/all', [AcademicYearController::class , 'destroyAll']);
+
+
+// Terms Crud
+Route::get('/term', [AcademicYearController::class , 'index']);
+Route::post('/term', [AcademicYearController::class , 'store']);
+Route::get('/term/{id}', [AcademicYearController::class , 'show']);
+Route::put('/term/{term}', [AcademicYearController::class , 'update']);
+Route::delete('/term/{idTerm}', [AcademicYearController::class , 'destroy']);
+Route::delete('/term', [AcademicYearController::class , 'destroyMulti']);
+Route::delete('/term/all', [AcademicYearController::class , 'destroyAll']);
+
+
+// Class Session Crud
+// Terms Crud
+Route::get('/class-session', [AcademicYearController::class , 'index']);
+Route::post('/class-session', [AcademicYearController::class , 'store']);
+Route::get('/class-session/{id}', [AcademicYearController::class , 'show']);
+Route::put('/class-session/{classSesion}', [AcademicYearController::class , 'update']);
+Route::delete('/class-session/{classSesion}', [AcademicYearController::class , 'destroy']);
+Route::delete('/class-session', [AcademicYearController::class , 'destroyMulti']);
+Route::delete('/class-session/all', [AcademicYearController::class , 'destroyAll']);
