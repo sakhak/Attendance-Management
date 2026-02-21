@@ -9,6 +9,7 @@ use App\Models\GradeLevel;
 use Illuminate\Http\Request;
 
 class GradeLevelController extends Controller
+
 {
     /**
      * Display a listing of the resource.
