@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->text('address')->nullable();
             $table->string('image')->nullable();
+            $table->timestamps();
         });
     }
 
