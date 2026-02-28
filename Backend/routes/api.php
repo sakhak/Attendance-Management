@@ -154,7 +154,6 @@ Route::prefix('academic-year')->group(function () {
     Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
 });
 
-
 // Terms Crud
 Route::prefix('term')->group(function () {
     Route::get('/', [AcademicYearController::class, 'index']);
