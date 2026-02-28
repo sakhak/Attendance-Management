@@ -92,7 +92,7 @@ Route::prefix('grade-levels')->group(function () {
     Route::put('/update/{id}', [GradeLevelController::class, 'update']);
     Route::delete('/{id}', [GradeLevelController::class, 'destroy']);
 });
-
+//....
 Route::prefix('grade-level-subjects')->group(function () {
     Route::post('/create', [GradeLevelSubjectController::class, 'store']);
     Route::put('/update/{id}', [GradeLevelSubjectController::class, 'update']);
@@ -135,10 +135,13 @@ Route::prefix('teachers')->group(function () {
     // Route::delete('/{teacher}', [TeacherController::class, 'destroy']);
 });
 
-// Enrollment (enroll, unenroll, list class students)
+// Enrollment CRUD
 Route::prefix('enrollments')->group(function () {
-    Route::post('/', [EnrollmentController::class, 'enroll']);
-    Route::delete('/', [EnrollmentController::class, 'unenroll']);
+    Route::get('/', [EnrollmentController::class, 'index']);
+    Route::post('/create', [EnrollmentController::class, 'store']);
+    Route::get('/{enrollment}', [EnrollmentController::class, 'show']);
+    Route::put('/update/{enrollment}', [EnrollmentController::class, 'update']);
+    Route::delete('/{enrollment}', [EnrollmentController::class, 'destroy']);
     Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
 });
 
