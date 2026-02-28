@@ -65,9 +65,12 @@ Route::prefix('students')->group(function () {
     Route::delete('/{student}', [StudentController::class, 'destroy']);
 });
 
-// Enrollment (enroll, unenroll, list class students)
-Route::post('/enrollments', [EnrollmentController::class, 'enroll']);
-Route::delete('/enrollments', [EnrollmentController::class, 'unenroll']);
+// Enrollment (CRUD)
+Route::get('/enrollments', [EnrollmentController::class, 'index']);
+Route::post('/enrollments', [EnrollmentController::class, 'store']);
+Route::get('/enrollments/{enrollment}', [EnrollmentController::class, 'show']);
+Route::put('/enrollments/{enrollment}', [EnrollmentController::class, 'update']);
+Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
 Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
 
 
