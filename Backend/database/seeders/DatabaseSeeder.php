@@ -22,7 +22,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            RbacSeeder::class,
+            // RbacSeeder::class,
+            // SubjectSeeder::class,
+            RoleSeeder::class,
         ]);
     }
 }

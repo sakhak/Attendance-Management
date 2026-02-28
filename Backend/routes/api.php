@@ -73,4 +73,3 @@ Route::put('/enrollments/{enrollment}', [EnrollmentController::class, 'update'])
 Route::delete('/enrollments/{enrollment}', [EnrollmentController::class, 'destroy']);
 Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
 
-
