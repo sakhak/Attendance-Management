@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\AttendanceRecordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
@@ -125,6 +127,13 @@ Route::prefix('students')->group(function () {
     Route::put('/update/{student}', [StudentController::class, 'update']);
     Route::delete('/{student}', [StudentController::class, 'destroy']);
 });
+// Teachers (CRUD + link to users)
+Route::prefix('teachers')->group(function () {
+    Route::get('/', [TeacherController::class, 'index']);
+    Route::get('/{teacher}', [TeacherController::class, 'show']);
+    Route::put('/update/{teacher}', [TeacherController::class, 'update']);
+    // Route::delete('/{teacher}', [TeacherController::class, 'destroy']);
+});
 
 // Enrollment (enroll, unenroll, list class students)
 Route::prefix('enrollments')->group(function () {
@@ -168,4 +177,20 @@ Route::prefix('class-session')->group(function () {
     Route::delete('/{classSesion}', [AcademicYearController::class, 'destroy']);
     Route::delete('/', [AcademicYearController::class, 'destroyMulti']);
     Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
+});
+
+// Attendance Record
+Route::prefix('attendance-records')->group(function () {
+    // List + show
+    Route::get('/', [AttendanceRecordController::class, 'index']);
+    Route::get('/{id}', [AttendanceRecordController::class, 'show']);
+
+    // create (many students for one class_session_id)
+    Route::post('/', [AttendanceRecordController::class, 'store']);
+
+    // update (many students for one class_session_id)
+    Route::put('/', [AttendanceRecordController::class, 'update']);
+
+    // delete (many students for one class_session_id)
+    Route::delete('/', [AttendanceRecordController::class, 'destroy']);
 });
