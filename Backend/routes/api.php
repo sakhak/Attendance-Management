@@ -84,7 +84,7 @@ Route::prefix('classes')->group(function () {
     Route::delete('/{class}', [ClassesController::class, 'destroy']);
 });
 
-
+//Grade level
 Route::prefix('grade-levels')->group(function () {
     Route::get('/', [GradeLevelController::class, 'index']);
     Route::post('/create', [GradeLevelController::class, 'store']);
@@ -92,7 +92,7 @@ Route::prefix('grade-levels')->group(function () {
     Route::put('/update/{id}', [GradeLevelController::class, 'update']);
     Route::delete('/{id}', [GradeLevelController::class, 'destroy']);
 });
-//....
+//Grade level subject
 Route::prefix('grade-level-subjects')->group(function () {
     Route::post('/create', [GradeLevelSubjectController::class, 'store']);
     Route::put('/update/{id}', [GradeLevelSubjectController::class, 'update']);
