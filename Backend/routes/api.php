@@ -179,7 +179,7 @@ Route::prefix('class-session')->group(function () {
     Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
 });
 
-// Attendance Record
+// Attendance Record ...
 Route::prefix('attendance-records')->group(function () {
     // List + show
     Route::get('/', [AttendanceRecordController::class, 'index']);
