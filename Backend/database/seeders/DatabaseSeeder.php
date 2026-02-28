@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             // RbacSeeder::class,
-            SubjectSeeder::class,
+            // SubjectSeeder::class,
+            RoleSeeder::class,
         ]);
     }
 }
