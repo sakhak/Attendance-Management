@@ -2,112 +2,133 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Enrollment\CreateEnrollment;
+use App\Actions\Enrollment\DeleteEnrollment;
+use App\Actions\Enrollment\UpdateEnrollment;
 use App\Models\Classes;
 use App\Models\Enrollment;
-use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class EnrollmentController extends Controller
 {
     /**
-     * Enroll a student in a class.
-     * Prevents duplicate enrollment and blocks inactive students.
+     * List all enrollments.
      */
-    public function enroll(Request $request)
+    public function index()
     {
         try {
-            $validated = $request->validate([
-                'class_id' => ['required', 'integer', 'exists:classes,id'],
-                'student_id' => ['required', 'integer', 'exists:students,id'],
-                'enrolled_on' => ['nullable', 'date'],
-            ]);
-
-            $student = Student::findOrFail($validated['student_id']);
-
-            if ($student->status !== \App\Models\StudentStatus::ACTIVE) {
-                throw ValidationException::withMessages([
-                    'student_id' => ['Cannot enroll an inactive or suspended student.'],
-                ]);
-            }
-
-            $exists = Enrollment::where('class_id', $validated['class_id'])
-                ->where('student_id', $validated['student_id'])
-                ->exists();
-
-            if ($exists) {
-                throw ValidationException::withMessages([
-                    'student_id' => ['This student is already enrolled in this class.'],
-                ]);
-            }
-
-            $class = Classes::findOrFail($validated['class_id']);
-            $validated['grade_level_id'] = $class->grade_level_id;
-            $validated['enrolled_on'] = $validated['enrolled_on'] ?? now()->toDateString();
-
-            $enrollment = Enrollment::create($validated);
+            $enrollments = Enrollment::with(['student.user', 'classes'])->get();
 
             return response()->json([
-                'data' => $enrollment->load(['student.user', 'classes']),
+                'list' => [
+                    'data' => $enrollments,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching enrollments',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Enroll a student in a class.
+     */
+    public function store(Request $request)
+    {
+        try {
+            $action     = new CreateEnrollment();
+            $enrollment = $action->create($request);
+
+            return response()->json([
+                'data'    => $enrollment->load(['student.user', 'classes']),
                 'message' => 'Student enrolled successfully',
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'errors'  => $e->errors(),
             ], 422);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'message' => 'Resource not found',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 404);
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error enrolling student',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Unenroll a student from a class.
+     * Show a specific enrollment.
      */
-    public function unenroll(Request $request)
+    public function show(Enrollment $enrollment)
     {
         try {
-            $validated = $request->validate([
-                'class_id' => ['required', 'integer', 'exists:classes,id'],
-                'student_id' => ['required', 'integer', 'exists:students,id'],
-            ]);
+            return response()->json([
+                'data' => $enrollment->load(['student.user', 'classes']),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error fetching enrollment',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
 
-            $deleted = Enrollment::where('class_id', $validated['class_id'])
-                ->where('student_id', $validated['student_id'])
-                ->delete();
-
-            if (!$deleted) {
-                return response()->json([
-                    'message' => 'Enrollment not found or already removed.',
-                ], 404);
-            }
+    /**
+     * Update an enrollment record.
+     */
+    public function update(Request $request, Enrollment $enrollment)
+    {
+        try {
+            $action            = new UpdateEnrollment();
+            $updatedEnrollment = $action->update($request, $enrollment);
 
             return response()->json([
-                'message' => 'Student unenrolled successfully',
+                'data'    => $updatedEnrollment,
+                'message' => 'Enrollment updated successfully',
             ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'errors'  => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Error unenrolling student',
-                'error' => $e->getMessage(),
+                'message' => 'Error updating enrollment',
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * List students enrolled in a class.
+     * Delete (unenroll) a specific enrollment by its ID.
+     */
+    public function destroy(Enrollment $enrollment)
+    {
+        try {
+            $action = new DeleteEnrollment();
+            $action->delete($enrollment);
+
+            return response()->json([
+                'message' => 'Student unenrolled successfully',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error unenrolling student',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * List students enrolled in a specific class.
      */
     public function listClassStudents(Classes $class)
     {
@@ -116,7 +137,7 @@ class EnrollmentController extends Controller
                 ->where('class_id', $class->id)
                 ->with(['student.user'])
                 ->get()
-                ->map(fn (Enrollment $e) => $e->student)
+                ->map(fn(Enrollment $e) => $e->student)
                 ->filter()
                 ->values();
 
@@ -128,7 +149,7 @@ class EnrollmentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error fetching class students',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

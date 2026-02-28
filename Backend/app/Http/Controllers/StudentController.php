@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Student\CreateStudent;
+use App\Actions\Student\DeleteStudent;
+use App\Actions\Student\UpdateStudent;
 use App\Models\Student;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class StudentController extends Controller
@@ -17,21 +20,23 @@ class StudentController extends Controller
         try {
             $query = Student::query()->with('user');
 
+            // Optional status filter
             if ($request->has('status')) {
-                $query->where('status', $request->status);
+                $query->where('status', $request->input('status'));
             }
 
             $students = $query->get();
 
             return response()->json([
-                'list' => [
-                    'data' => $students,
-                ],
-            ]);
-        } catch (\Exception $e) {
+                'success' => true,
+                'data'    => $students,
+            ], 200);
+
+        } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'message' => 'Error fetching students',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -42,35 +47,22 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'user_id' => ['required', 'integer', 'exists:users,id'],
-                'student_code' => ['required', 'string', 'max:255', 'unique:students,student_code'],
-                'status' => ['nullable', 'string', Rule::in(['active', 'inactive'])],
-            ]);
-
-            // Ensure one user has at most one student record
-            if (Student::where('user_id', $validated['user_id'])->exists()) {
-                throw ValidationException::withMessages([
-                    'user_id' => ['This user is already linked to a student.'],
-                ]);
-            }
-
-            $validated['status'] = $validated['status'] ?? 'active';
-            $student = Student::create($validated);
+            $action  = new CreateStudent();
+            $student = $action->create($request);
 
             return response()->json([
-                'data' => $student->load('user'),
+                'data'    => $student->load('user'),
                 'message' => 'Student created successfully',
             ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'errors'  => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error creating student',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -85,10 +77,10 @@ class StudentController extends Controller
             return response()->json([
                 'data' => $student,
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error fetching student',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -99,40 +91,22 @@ class StudentController extends Controller
     public function update(Request $request, Student $student)
     {
         try {
-            $validated = $request->validate([
-                'user_id' => ['sometimes', 'integer', 'exists:users,id'],
-                'student_code' => [
-                    'sometimes',
-                    'string',
-                    'max:255',
-                    Rule::unique('students', 'student_code')->ignore($student->id),
-                ],
-                'status' => ['sometimes', 'string', Rule::in(['active', 'inactive'])],
-            ]);
-
-            if (isset($validated['user_id']) && $validated['user_id'] !== (int) $student->user_id) {
-                if (Student::where('user_id', $validated['user_id'])->exists()) {
-                    throw ValidationException::withMessages([
-                        'user_id' => ['This user is already linked to a student.'],
-                    ]);
-                }
-            }
-
-            $student->update($validated);
+            $action         = new UpdateStudent();
+            $updatedStudent = $action->update($request, $student);
 
             return response()->json([
-                'data' => $student->fresh('user'),
+                'data'    => $updatedStudent,
                 'message' => 'Student updated successfully',
             ], 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'errors'  => $e->errors(),
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error updating student',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
@@ -143,14 +117,16 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         try {
-            $student->delete();
+            $action = new DeleteStudent();
+            $action->delete($student);
+
             return response()->json([
                 'message' => 'Student deleted successfully',
             ], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Error deleting student',
-                'error' => $e->getMessage(),
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }
