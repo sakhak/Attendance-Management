@@ -42,12 +42,23 @@ class Student extends Model
         return $this->hasOne(Enrollment::class, 'student_id');
     }
 
-    public function attendance_record(): HasMany {
+    public function attendance_record(): HasMany
+    {
         return $this->hasMany(AttendanceRecord::class, 'student_id');
     }
 
-    public function black_list(): HasMany {
+    public function black_list(): HasMany
+    {
         return $this->hasMany(BlackList::class, 'student_id');
     }
 
+    public function classes()
+    {
+        return $this->belongsToMany(
+            Classes::class,
+            'enrollment',
+            'student_id',
+            'class_id'
+        );
+    }
 }
