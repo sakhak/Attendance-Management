@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ClassSessionController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\GradeLevelController;
 use App\Http\Controllers\GradeLevelSubjectController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TermController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
@@ -159,30 +161,33 @@ Route::prefix('academic-year')->group(function () {
 
 // Terms Crud
 Route::prefix('term')->group(function () {
-    Route::get('/', [AcademicYearController::class, 'index']);
-    Route::post('/', [AcademicYearController::class, 'store']);
-    Route::get('/{id}', [AcademicYearController::class, 'show']);
-    Route::put('/{term}', [AcademicYearController::class, 'update']);
-    Route::delete('/{idTerm}', [AcademicYearController::class, 'destroy']);
-    Route::delete('/', [AcademicYearController::class, 'destroyMulti']);
-    Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
+    Route::get('/', [TermController::class, 'index']);
+    Route::post('/', [TermController::class, 'store']);
+    Route::get('/{id}', [TermController::class, 'show']);
+    Route::put('/{term}', [TermController::class, 'update']);
+    Route::delete('/{idTerm}', [TermController::class, 'destroy']);
+    Route::delete('/', [TermController::class, 'destroyMulti']);
+    Route::delete('/all', [TermController::class, 'destroyAll']);
 });
 
 
 // Class Session Crud
-// Terms Crud
 Route::prefix('class-session')->group(function () {
-    Route::get('/', [AcademicYearController::class, 'index']);
-    Route::post('/', [AcademicYearController::class, 'store']);
-    Route::get('/{id}', [AcademicYearController::class, 'show']);
-    Route::put('/{classSesion}', [AcademicYearController::class, 'update']);
-    Route::delete('/{classSesion}', [AcademicYearController::class, 'destroy']);
-    Route::delete('/', [AcademicYearController::class, 'destroyMulti']);
-    Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
+    Route::get('/', [ClassSessionController::class, 'index']);
+    Route::post('/', [ClassSessionController::class, 'store']);
+    Route::get('/{id}', [ClassSessionController::class, 'show']);
+    Route::put('/{classSession}', [ClassSessionController::class, 'update']);
+    Route::delete('/{classSession}', [ClassSessionController::class, 'destroy']);
+    Route::delete('/', [ClassSessionController::class, 'destroyMulti']);
+    Route::delete('/all', [ClassSessionController::class, 'destroyAll']);
 });
 
-// Attendance Record ...
+
+
+// Attendance Record
 Route::prefix('attendance-records')->group(function () {
+    // Filter attendance records
+    Route::get('/filter', [AttendanceRecordController::class, 'filter']);
     // List + show
     Route::get('/', [AttendanceRecordController::class, 'index']);
     Route::get('/{id}', [AttendanceRecordController::class, 'show']);

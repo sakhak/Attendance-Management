@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Actions\AttendanceRecord\CreateAttendanceRecord;
 use App\Actions\AttendanceRecord\DeleteAttendanceRecord;
+use App\Actions\AttendanceRecord\FilterAttendanceRecord;
 use App\Actions\AttendanceRecord\UpdateAttendanceRecord;
 use App\Models\AttendanceRecord;
+use App\Models\ClassSession;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -46,6 +48,28 @@ class AttendanceRecordController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function filter(Request $request, FilterAttendanceRecord $action)
+    {
+        $validated = $request->validate([
+            'date'       => ['required', 'date'],
+            'term_id'    => ['required', 'integer'],
+            'class_id'   => ['required', 'integer'],
+            'teacher_id' => ['required', 'integer'],
+
+            // Optional (for time range filtering)
+            'start_time' => ['nullable', 'date_format:H:i:s'],
+            'end_time'   => ['nullable', 'date_format:H:i:s'],
+        ]);
+
+        $result = $action->execute($validated);
+
+        return response()->json([
+            'success' => $result['success'],
+            'message' => $result['message'],
+            'data'    => $result['data'],
+        ], $result['code']);
     }
 
     /**

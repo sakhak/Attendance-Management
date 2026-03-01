@@ -20,7 +20,7 @@ class AuthController extends Controller
      */
     public function index()
     {
-        $user = User::all();
+        $user = User::with('roles')->get();
         return response()->json($user);
     }
 
