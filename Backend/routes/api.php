@@ -1,17 +1,23 @@
 <?php
 
 use App\Http\Controllers\AcademicYearController;
+use App\Http\Controllers\AttendanceRecordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassSessionController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GradeLevelController;
+use App\Http\Controllers\GradeLevelSubjectController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TermController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserRoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +34,15 @@ Route::prefix('auth')->group(function () {
     });
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('user-profile')->group(function () {
+        Route::post('/create', [UserProfileController::class, 'store']);
+        Route::get('/show', [UserProfileController::class, 'show']);
+        Route::put('/update', [UserProfileController::class, 'update']);
+        Route::delete('/delete', [UserProfileController::class, 'destroy']);
+    });
+});
+
 Route::prefix('permissions')->group(function () {
     Route::post('/', [PermissionController::class, 'store']);
     Route::put('/{permission}', [PermissionController::class, 'update']);
@@ -36,79 +51,153 @@ Route::prefix('permissions')->group(function () {
     Route::get('/', [PermissionController::class, 'index']);
 });
 
+// Roles CRUD
+Route::prefix('roles')->group(function () {
+    Route::post('/create', [RoleController::class, 'store']);
+    Route::get('/', [RoleController::class, 'index']);
+    Route::get('/{role}', [RoleController::class, 'show']);
+    Route::put('/update/{role}', [RoleController::class, 'update']);
+    Route::delete('/{role}', [RoleController::class, 'destroy']);
+});
 
+// User-Role Management
+Route::prefix('user-roles')->group(function () {
+    Route::post('/create', [UserRoleController::class, 'store']);    // attach
+    Route::post('/update', [UserRoleController::class, 'update']);     // update
+    Route::post('/delete', [UserRoleController::class, 'destroy']); // detach
+    Route::get('/', [UserRoleController::class, 'index']);
+    Route::get('/{id}', [UserRoleController::class, 'show']);
+});
 
-Route::post('/roles', [RoleController::class, 'store']);
-Route::get('/roles', [RoleController::class, 'index']);
-Route::get('/roles/{role}', [RoleController::class, 'show']);
-Route::put('/roles/{role}', [RoleController::class, 'update']);
-Route::delete('/roles/{role}', [RoleController::class, 'destroy']);
-
-Route::get('/rolepermission', [RolePermissionController::class, 'index']);
-
+// Role-Permission Management
 Route::prefix('roles/{role}/permissions')->group(function () {
+    Route::get('/', [RolePermissionController::class, 'index']);
     Route::post('/', [RolePermissionController::class, 'store']);     // attach
     Route::put('/', [RolePermissionController::class, 'update']);     // update
     Route::delete('/', [RolePermissionController::class, 'destroy']); // detach
 });
 
+// Classes CRUD
+Route::prefix('classes')->group(function () {
+    Route::get('/', [ClassesController::class, 'index']);
+    Route::post('/create', [ClassesController::class, 'store']);
+    Route::get('/{class}', [ClassesController::class, 'show']);
+    Route::put('/update/{class}', [ClassesController::class, 'update']);
+    Route::delete('/{class}', [ClassesController::class, 'destroy']);
+});
 
-Route::get('/classes', [ClassesController::class, 'index']);
-Route::post('/classes', [ClassesController::class, 'store']);
-Route::get('/classes/{class}', [ClassesController::class, 'show']);
-Route::put('/classes/{class}', [ClassesController::class, 'update']);
-Route::delete('/classes/{class}', [ClassesController::class, 'destroy']);
+//Grade level
+Route::prefix('grade-levels')->group(function () {
+    Route::get('/', [GradeLevelController::class, 'index']);
+    Route::post('/create', [GradeLevelController::class, 'store']);
+    Route::get('/{id}', [GradeLevelController::class, 'show']);
+    Route::put('/update/{id}', [GradeLevelController::class, 'update']);
+    Route::delete('/{id}', [GradeLevelController::class, 'destroy']);
+});
+//Grade level subject
+Route::prefix('grade-level-subjects')->group(function () {
+    Route::post('/create', [GradeLevelSubjectController::class, 'store']);
+    Route::put('/update/{id}', [GradeLevelSubjectController::class, 'update']);
+    Route::delete('/{id}', [GradeLevelSubjectController::class, 'destroy']);
+    Route::get('/{id}', [GradeLevelSubjectController::class, 'show']);
+    Route::get('/', [GradeLevelSubjectController::class, 'index']);
+});
 
-Route::get('/blacklists', [BlacklistController::class, 'index']);
-Route::post('/blacklists', [BlacklistController::class, 'store']);
-Route::get('/blacklists/{blacklist}', [BlacklistController::class, 'show']);
-Route::put('/blacklists/{blacklist}', [BlacklistController::class, 'update']);
-Route::delete('/blacklists/{blacklist}', [BlacklistController::class, 'destroy']);
+// Blacklist CRUD
+Route::prefix('blacklists')->group(function () {
+    Route::get('/', [BlacklistController::class, 'index']);
+    Route::post('/create', [BlacklistController::class, 'store']);
+    Route::get('/{blacklist}', [BlacklistController::class, 'show']);
+    Route::put('/update/{blacklist}', [BlacklistController::class, 'update']);
+    Route::delete('/{blacklist}', [BlacklistController::class, 'destroy']);
+});
 
-Route::get('/class-teachers', [ClassTeacherController::class, 'index']);
-Route::post('/class-teachers', [ClassTeacherController::class, 'store']);
-Route::get('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'show']);
-Route::put('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'update']);
-Route::delete('/class-teachers/{classTeacher}', [ClassTeacherController::class, 'destroy']);
+// Class Teacher CRUD
+Route::prefix('class-teachers')->group(function () {
+    Route::get('/', [ClassTeacherController::class, 'index']);
+    Route::post('/create', [ClassTeacherController::class, 'store']);
+    Route::get('/{classTeacher}', [ClassTeacherController::class, 'show']);
+    Route::put('/update/{classTeacher}', [ClassTeacherController::class, 'update']);
+    Route::delete('/{classTeacher}', [ClassTeacherController::class, 'destroy']);
+});
 
 // Students (CRUD + link to users)
-Route::get('/students', [StudentController::class, 'index']);
-Route::post('/students', [StudentController::class, 'store']);
-Route::get('/students/{student}', [StudentController::class, 'show']);
-Route::put('/students/{student}', [StudentController::class, 'update']);
-Route::delete('/students/{student}', [StudentController::class, 'destroy']);
+Route::prefix('students')->group(function () {
+    Route::get('/', [StudentController::class, 'index']);
+    Route::post('/create', [StudentController::class, 'store']);
+    Route::get('/{student}', [StudentController::class, 'show']);
+    Route::put('/update/{student}', [StudentController::class, 'update']);
+    Route::delete('/{student}', [StudentController::class, 'destroy']);
+});
+// Teachers (CRUD + link to users)
+Route::prefix('teachers')->group(function () {
+    Route::get('/', [TeacherController::class, 'index']);
+    Route::get('/{teacher}', [TeacherController::class, 'show']);
+    Route::put('/update/{teacher}', [TeacherController::class, 'update']);
+    // Route::delete('/{teacher}', [TeacherController::class, 'destroy']);
+});
 
-// Enrollment (enroll, unenroll, list class students)
-Route::post('/enrollments', [EnrollmentController::class, 'enroll']);
-Route::delete('/enrollments', [EnrollmentController::class, 'unenroll']);
-Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
+// Enrollment CRUD
+Route::prefix('enrollments')->group(function () {
+    Route::get('/', [EnrollmentController::class, 'index']);
+    Route::post('/create', [EnrollmentController::class, 'store']);
+    Route::get('/{enrollment}', [EnrollmentController::class, 'show']);
+    Route::put('/update/{enrollment}', [EnrollmentController::class, 'update']);
+    Route::delete('/{enrollment}', [EnrollmentController::class, 'destroy']);
+    Route::get('/classes/{class}/students', [EnrollmentController::class, 'listClassStudents']);
+});
 
 
 // Academic year Crud
-Route::get('/academic-year', [AcademicYearController::class , 'index']);
-Route::post('/academic-year', [AcademicYearController::class , 'store']);
-Route::get('/academic-year/{id}', [AcademicYearController::class , 'show']);
-Route::put('/academic-year/{academicYear}', [AcademicYearController::class , 'update']);
-Route::delete('/academic-year/{academicYear}', [AcademicYearController::class , 'destroy']);
-Route::delete('/academic-year', [AcademicYearController::class , 'destroyMulti']);
-Route::delete('/academic-year/all', [AcademicYearController::class , 'destroyAll']);
-
+Route::prefix('academic-year')->group(function () {
+    Route::get('/', [AcademicYearController::class, 'index']);
+    Route::post('/', [AcademicYearController::class, 'store']);
+    Route::get('/{id}', [AcademicYearController::class, 'show']);
+    Route::put('/{academicYear}', [AcademicYearController::class, 'update']);
+    Route::delete('/{academicYear}', [AcademicYearController::class, 'destroy']);
+    Route::delete('/', [AcademicYearController::class, 'destroyMulti']);
+    Route::delete('/all', [AcademicYearController::class, 'destroyAll']);
+});
 
 // Terms Crud
-Route::get('/term', [TermController::class , 'index']);
-Route::post('/term', [TermController::class , 'store']);
-Route::get('/term/{id}', [TermController::class , 'show']);
-Route::put('/term/{term}', [TermController::class , 'update']);
-Route::delete('/term/{idTerm}', [TermController::class , 'destroy']);
-Route::delete('/term', [TermController::class , 'destroyMulti']);
-Route::delete('/term/all', [TermController::class , 'destroyAll']);
+Route::prefix('term')->group(function () {
+    Route::get('/', [TermController::class, 'index']);
+    Route::post('/', [TermController::class, 'store']);
+    Route::get('/{id}', [TermController::class, 'show']);
+    Route::put('/{term}', [TermController::class, 'update']);
+    Route::delete('/{idTerm}', [TermController::class, 'destroy']);
+    Route::delete('/', [TermController::class, 'destroyMulti']);
+    Route::delete('/all', [TermController::class, 'destroyAll']);
+});
 
 
 // Class Session Crud
-Route::get('/class-session', [ClassSessionController::class , 'index']);
-Route::post('/class-session', [ClassSessionController::class , 'store']);
-Route::get('/class-session/{id}', [ClassSessionController::class , 'show']);
-Route::put('/class-session/{classSesion}', [ClassSessionController::class , 'update']);
-Route::delete('/class-session/{classSesion}', [ClassSessionController::class , 'destroy']);
-Route::delete('/class-session', [ClassSessionController::class , 'destroyMulti']);
-Route::delete('/class-session/all', [ClassSessionController::class , 'destroyAll']);
+Route::prefix('class-session')->group(function () {
+    Route::get('/', [ClassSessionController::class, 'index']);
+    Route::post('/', [ClassSessionController::class, 'store']);
+    Route::get('/{id}', [ClassSessionController::class, 'show']);
+    Route::put('/{classSession}', [ClassSessionController::class, 'update']);
+    Route::delete('/{classSession}', [ClassSessionController::class, 'destroy']);
+    Route::delete('/', [ClassSessionController::class, 'destroyMulti']);
+    Route::delete('/all', [ClassSessionController::class, 'destroyAll']);
+});
+
+
+
+// Attendance Record
+Route::prefix('attendance-records')->group(function () {
+    // Filter attendance records
+    Route::get('/filter', [AttendanceRecordController::class, 'filter']);
+    // List + show
+    Route::get('/', [AttendanceRecordController::class, 'index']);
+    Route::get('/{id}', [AttendanceRecordController::class, 'show']);
+
+    // create (many students for one class_session_id)
+    Route::post('/', [AttendanceRecordController::class, 'store']);
+
+    // update (many students for one class_session_id)
+    Route::put('/', [AttendanceRecordController::class, 'update']);
+
+    // delete (many students for one class_session_id)
+    Route::delete('/', [AttendanceRecordController::class, 'destroy']);
+});
