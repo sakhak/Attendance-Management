@@ -5,11 +5,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ClassSessionController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TermController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -93,21 +95,20 @@ Route::delete('/academic-year/all', [AcademicYearController::class , 'destroyAll
 
 
 // Terms Crud
-Route::get('/term', [AcademicYearController::class , 'index']);
-Route::post('/term', [AcademicYearController::class , 'store']);
-Route::get('/term/{id}', [AcademicYearController::class , 'show']);
-Route::put('/term/{term}', [AcademicYearController::class , 'update']);
-Route::delete('/term/{idTerm}', [AcademicYearController::class , 'destroy']);
-Route::delete('/term', [AcademicYearController::class , 'destroyMulti']);
-Route::delete('/term/all', [AcademicYearController::class , 'destroyAll']);
+Route::get('/term', [TermController::class , 'index']);
+Route::post('/term', [TermController::class , 'store']);
+Route::get('/term/{id}', [TermController::class , 'show']);
+Route::put('/term/{term}', [TermController::class , 'update']);
+Route::delete('/term/{idTerm}', [TermController::class , 'destroy']);
+Route::delete('/term', [TermController::class , 'destroyMulti']);
+Route::delete('/term/all', [TermController::class , 'destroyAll']);
 
 
 // Class Session Crud
-// Terms Crud
-Route::get('/class-session', [AcademicYearController::class , 'index']);
-Route::post('/class-session', [AcademicYearController::class , 'store']);
-Route::get('/class-session/{id}', [AcademicYearController::class , 'show']);
-Route::put('/class-session/{classSesion}', [AcademicYearController::class , 'update']);
-Route::delete('/class-session/{classSesion}', [AcademicYearController::class , 'destroy']);
-Route::delete('/class-session', [AcademicYearController::class , 'destroyMulti']);
-Route::delete('/class-session/all', [AcademicYearController::class , 'destroyAll']);
+Route::get('/class-session', [ClassSessionController::class , 'index']);
+Route::post('/class-session', [ClassSessionController::class , 'store']);
+Route::get('/class-session/{id}', [ClassSessionController::class , 'show']);
+Route::put('/class-session/{classSesion}', [ClassSessionController::class , 'update']);
+Route::delete('/class-session/{classSesion}', [ClassSessionController::class , 'destroy']);
+Route::delete('/class-session', [ClassSessionController::class , 'destroyMulti']);
+Route::delete('/class-session/all', [ClassSessionController::class , 'destroyAll']);
