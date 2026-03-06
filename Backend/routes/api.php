@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\AttendanceRecordController;
+use App\Http\Controllers\AttendanceReportExportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlacklistController;
 use App\Http\Controllers\ClassTeacherController;
@@ -182,6 +183,13 @@ Route::prefix('class-session')->group(function () {
     Route::delete('/all', [ClassSessionController::class, 'destroyAll']);
 });
 
+
+// Generate Report
+
+Route::prefix('report-export')->group(function () {
+Route::post('/{format}', [AttendanceReportExportController::class, 'export'])
+    ->where('format', 'pdf|xlsx');
+});
 
 
 // Attendance Record
