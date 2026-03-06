@@ -131,10 +131,10 @@ Route::prefix('students')->group(function () {
     Route::delete('/{student}', [StudentController::class, 'destroy']);
 });
 // Teachers (CRUD + link to users)
-Route::prefix('teachers')->group(function () {
+Route::middleware(['role:admin'])->prefix('teachers')->group(function () {
     Route::get('/', [TeacherController::class, 'index']);
-    Route::get('/{teacher}', [TeacherController::class, 'show']);
-    Route::put('/update/{teacher}', [TeacherController::class, 'update']);
+    // Route::get('/{teacher}', [TeacherController::class, 'show']);
+    // Route::put('/update/{teacher}', [TeacherController::class, 'update']);
     // Route::delete('/{teacher}', [TeacherController::class, 'destroy']);
 });
 
@@ -187,8 +187,8 @@ Route::prefix('class-session')->group(function () {
 // Generate Report
 
 Route::prefix('report-export')->group(function () {
-Route::post('/{format}', [AttendanceReportExportController::class, 'export'])
-    ->where('format', 'pdf|xlsx');
+    Route::post('/{format}', [AttendanceReportExportController::class, 'export'])
+        ->where('format', 'pdf|xlsx');
 });
 
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 // enum for student status
+
 enum StudentStatus: string
 {
     case ACTIVE = 'active';

@@ -14,13 +14,23 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable,HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
+    protected static function booted(): void
+    {
+        static::created(function ($user) {
+            Student::create([
+                'user_id' => $user->id,
+                'student_code' => 'STU-' . str_pad($user->id, 5, '0', STR_PAD_LEFT),
+                'status' => StudentStatus::ACTIVE,
+            ]);
+        });
+    }
     protected $fillable = [
         'name',
         'email',
@@ -66,11 +76,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Teacher::class, 'user_id');
     }
-    public function reportexports():HasMany
+    public function reportexports(): HasMany
     {
         return $this->hasMany(ReportExports::class, 'user_id');
     }
-    public function recordedAttendance():HasMany
+    public function recordedAttendance(): HasMany
     {
         return $this->hasMany(AttendanceRecord::class, 'recorded_by');
     }
