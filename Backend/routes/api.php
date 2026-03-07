@@ -133,8 +133,8 @@ Route::prefix('students')->group(function () {
 // Teachers (CRUD + link to users)
 Route::middleware(['role:admin'])->prefix('teachers')->group(function () {
     Route::get('/', [TeacherController::class, 'index']);
-    // Route::get('/{teacher}', [TeacherController::class, 'show']);
-    // Route::put('/update/{teacher}', [TeacherController::class, 'update']);
+    Route::get('/{teacher}', [TeacherController::class, 'show']);
+    Route::put('/update/{teacher}', [TeacherController::class, 'update']);
     // Route::delete('/{teacher}', [TeacherController::class, 'destroy']);
 });
 
